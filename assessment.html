@@ -2,94 +2,324 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-        body{
-            justify-content: center;
-            background-color: aqua;
-        }
-        .new{
-            display: flex;
-            /* flex-direction: column; */
-        }
-        .button{
-            align-items: center;
-        }
+      body {
+        display: grid;
+        place-content: center;
+        background: #f0f0f001;
+        background-color: aliceblue; /* Light gray background */
+        font-family: Roboto, "sans-serif";
+        color: #333; /* Dark gray text color */
+      }
+      h1 {
+        text-align: center;
+        color: #010407; /* Blue header text color */
+        margin-top: 20px;
+      }
+
+      .add-user-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 30rem;
+        /* margin: 1rem auto; */
+        background: #fff; /* White background for the form */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Box shadow for the form */
+      }
+
+      .add-user-form input[type="text"],
+      .add-user-form button {
+        font-size: 1.2rem;
+        padding: 10px;
+        border: 1px solid #080808; /* Light gray border for input fields */
+        border-radius: 4px;
+      }
+
+      .add-user-form input[type="text"]:focus {
+        border-color: #007bff; /* Blue border color when input is focused */
+      }
+
+      .add-user-form button {
+        background: #007bff; /* Blue background for the button */
+        color: #fff; /* White text color for the button */
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Smooth button color transition */
+      }
+
+      .add-user-form button:hover {
+        background: #0056b3; /* Darker blue background on hover */
+      }
+
+      .books-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 30rem;
+        margin: 0 auto;
+      }
+
+      .user {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        padding: 0.8rem;
+        border-radius: 0.8rem;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
+
+      .user-pic {
+        height: 25rem;
+        width: 75%;
+        object-fit: cover;
+        display: block; /* Ensure it's a block-level element */
+        margin-left: auto; /* Set left margin to auto */
+        margin-right: auto;
+      }
+
+      /* .user-detail {
+        display: flex;
+        flex-direction: column;
+      } */
+
+      .user-name {
+        margin-top: 10px;
+        color: #09090a;
+        background-color: rgb(208, 205, 205);
+        text-align: center; /* Blue text color for user names */
+      }
+
+      .user-detail span {
+        color: #070000; /* Gray text color for details */
+      }
+
+      .page-nav-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .user-detail button {
+        background-color: red; /* Red background color */
+        color: #ffffff; /* White text color */
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .user-detail button:hover {
+        background-color: #cc0000; /* Darker red background color on hover */
+      }
+      .previous-btn,
+      .next-btn {
+        background: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .previous-btn:hover,
+      .next-btn:hover {
+        background: #0056b3;
+      }
+
+      .pagination-buttons {
+        margin: 0 20px;
+        color: #333;
+        font-weight: bold;
+      }
+
+      /* Colorful changes end */
     </style>
   </head>
   <body>
-    <section id="book-list"></section>
-    <div class="new">
-    <form id="book-list">
-      <label for="title">Title:</label>
-      <input type="text" id="title" required />
-      <label for="author">Author:</label>
-      <input type="text" id="author" required />
-      <label for="genre">Genre:</label>
-      <input type="text" id="genre" required />
-      <label for="publishedYear">publishedYear:</label>
-      <input type="text" id="publishedYear" required />
-      <label for="description">description:</label>
-      <input type="text" id="description" required />
-      <label for="id">id:</label>
-      <input type="text" id="id" required />
-    </div>
-    <div class="button">
-      <button type="submit">Add Book</button>
-      <button type="submit">delete Book</button>
-      <button type="submit">edit Book</button>
-    </div>
-    </form>
-    <script>
-      function displayBooks() {
-        fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`)
-          .then((response) => response.json())
-          .then((data) => {
-            const bookList = document.getElementById("book-list");
-            bookList.innerHTML = " ";
+    <h1>BOOK HUB 📕</h1>
 
-            data.forEach((book) => {
-              const listItem = document.createElement("li");
-              listItem.innerHTML = `
-                    <strong>Title:</strong> ${book.title}<br>
-                    <strong>Author:</strong> ${book.author}<br>
-                    <strong>Genre:</strong> ${book.genre}<br>
-                    <strong>publishedYear:</strong> ${book.publishedYear}<br>
-                    <strong>description:</strong> ${book.description}<br>
-                    <strong>id:</strong> ${book.id}<br>`;
-              bookList.appendChild(listItem);
-            });
+    <div class="add-user-form">
+      <input class="search-user" type="text" placeholder="searchuser" />
+      <button onclick="searchUser()">Search user</button>
+      <input class="booktitle" type="text" placeholder="title" />
+      <input class="bookpic" type="text" placeholder="Picture URL" />
+      <input class="bookpublished" type="text" placeholder="publishedYear" />
+      <input class="bookdescription" type="text" placeholder="Description" />
+      <input class="bookauthor" type="text" placeholder="author" />
+      <input class="bookgenre" type="text" placeholder="genre" />
+      <button onclick="addUser()">Add User</button>
+    </div>
+    <div style="margin-bottom: 20px"></div>
+    <section class="books-container"></section>
+    <div class="page-nav-buttons">
+      <button class="previous-btn" onclick="prev()">prev👈</button>
+
+      <span class="pagination-buttons"></span>
+
+      <button class="next-btn" onclick="next()">next👉</button>
+    </div>
+    <script>
+      const usersList = document.querySelector(".books-container");
+      let pageno = 1; // Use "pageno" instead of "pagenum"
+      let limit = 3;
+      let maxlength;
+
+      function addUser() {
+        console.log("Adding...");
+        const title = document.querySelector(".booktitle").value;
+        const coverImageUrl = document.querySelector(".bookpic").value;
+        const publishedYear = document.querySelector(".bookpublished").value;
+        const genre = document.querySelector(".bookgenre").value;
+        const description = document.querySelector(".bookdescription").value;
+        const author = document.querySelector(".bookauthor").value;
+
+        const data = {
+          title,
+          author,
+          genre,
+          description,
+          publishedYear,
+          coverImageUrl,
+        };
+
+        // Create -> Refresh
+        fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-type": "application/json",
+          },
+        }).then(() => getUsers());
+
+        console.log(title, coverImageUrl);
+      }
+
+      const createUser = ({
+        title,
+        coverImageUrl,
+        description,
+        id,
+        author,
+        genre,
+        publishedYear,
+      }) => {
+        usersList.innerHTML += `<div class="user">
+        <img
+          class="user-pic"
+          src=${coverImageUrl}
+          alt=${title}
+        />
+        
+        <div class="user-detail">
+          <h2 class="user-name">${title}</h2>
+          <span><b>Year:</b> ${publishedYear}</span>
+          <span><b> · Genre:</b> ${genre}</span>
+          <p>${description}</p>
+          <h4>${author}</h4>
+          <button onclick="deleteUser(${id})">Delete</button>
+        </div>
+    </div>`;
+      };
+
+      function deleteUser(id) {
+        // Print the id of user in console
+        console.log("Deleting... User", id);
+
+        // Avoided Race condition
+        // Delete -> Refresh
+        fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers/${id}`, {
+          method: "DELETE",
+        }).then(() => getUsers());
+      }
+
+      function searchUser() {
+        // Print the id of user in console
+        console.log("searching... User");
+        const search = document.querySelector(".search-user").value;
+        // Avoided Race condition
+        // Search -> Display results
+        fetch(
+          `https://64f6f41c9d7754084952d88a.mockapi.io/bookusers?title=${search}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((res) => res.json())
+          .then((users) => {
+            // Clear the old list
+            usersList.innerHTML = "";
+            // Adding the new list
+            users.forEach(createUser);
           });
       }
-    //   document.getElementById("book-list");
-    //   const title = document.getElementById("title").value;
-    //   const author = document.getElementById("Author").value;
-    //   const genre = document.getElementById("genre").value;
-    //   const publishedYear = document.getElementById("publishedYear").value;
-    //   const description = document.getElementById("description").value;
-    //   const id = document.getElementById("id").value;
-    //   const newBook = {
-    //     title,
-    //     author,
-    //     genre,publishedYear,description,id
-    //   };
 
-    //   fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(newBook),
-    //   }).then(() => {
-    //     displayBooks();
-    //     document.getElementById("book-list").reset();
-    //   });
-    //   function editBook(bookId) {}
+      function getUsers() {
+        fetch(
+          `https://64f6f41c9d7754084952d88a.mockapi.io/bookusers?page=${pageno}&limit=${limit}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((res) => res.json())
+          .then((users) => {
+            // Clear the old list
+            usersList.innerHTML = "";
+            // Adding the new list
+            users.forEach(createUser);
+          });
+      }
 
-    //   function deleteBook(id) {}
+      function next() {
+        if (pageno == maxlength) {
+          // Use "maxlength" to check if you've reached the last page
+          return;
+        }
+        pageno++;
+        getUsers();
+      }
 
-      displayBooks();
+      function prev() {
+        if (pageno == 1) {
+          return;
+        }
+        pageno--;
+        getUsers();
+      }
+
+      function totalbooks() {
+        fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`, {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((books) => {
+            maxlength = Math.ceil(books.length / limit);
+            navbtn();
+          });
+      }
+
+      totalbooks();
+
+      function navbtn() {
+        const btn = document.querySelector(".pagination-buttons");
+        btn.innerHTML = ""; // Clear existing buttons
+        for (let i = 1; i <= maxlength; i++) {
+          // Start from page 1
+          btn.innerHTML += `<button onclick="nav(${i})">${i}</button>`;
+        }
+        nav(pageno);
+      }
+
+      function nav(pagenum) {
+        pageno = pagenum;
+        getUsers();
+      }
+
+      getUsers();
     </script>
   </body>
 </html>
