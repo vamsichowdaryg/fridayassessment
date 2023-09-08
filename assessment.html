@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body{
+            justify-content: center;
+            background-color: aqua;
+        }
+        .new{
+            display: flex;
+            /* flex-direction: column; */
+        }
+        .button{
+            align-items: center;
+        }
+    </style>
+  </head>
+  <body>
+    <section id="book-list"></section>
+    <div class="new">
+    <form id="book-list">
+      <label for="title">Title:</label>
+      <input type="text" id="title" required />
+      <label for="author">Author:</label>
+      <input type="text" id="author" required />
+      <label for="genre">Genre:</label>
+      <input type="text" id="genre" required />
+      <label for="publishedYear">publishedYear:</label>
+      <input type="text" id="publishedYear" required />
+      <label for="description">description:</label>
+      <input type="text" id="description" required />
+      <label for="id">id:</label>
+      <input type="text" id="id" required />
+    </div>
+    <div class="button">
+      <button type="submit">Add Book</button>
+      <button type="submit">delete Book</button>
+      <button type="submit">edit Book</button>
+    </div>
+    </form>
+    <script>
+      function displayBooks() {
+        fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`)
+          .then((response) => response.json())
+          .then((data) => {
+            const bookList = document.getElementById("book-list");
+            bookList.innerHTML = " ";
+
+            data.forEach((book) => {
+              const listItem = document.createElement("li");
+              listItem.innerHTML = `
+                    <strong>Title:</strong> ${book.title}<br>
+                    <strong>Author:</strong> ${book.author}<br>
+                    <strong>Genre:</strong> ${book.genre}<br>
+                    <strong>publishedYear:</strong> ${book.publishedYear}<br>
+                    <strong>description:</strong> ${book.description}<br>
+                    <strong>id:</strong> ${book.id}<br>`;
+              bookList.appendChild(listItem);
+            });
+          });
+      }
+    //   document.getElementById("book-list");
+    //   const title = document.getElementById("title").value;
+    //   const author = document.getElementById("Author").value;
+    //   const genre = document.getElementById("genre").value;
+    //   const publishedYear = document.getElementById("publishedYear").value;
+    //   const description = document.getElementById("description").value;
+    //   const id = document.getElementById("id").value;
+    //   const newBook = {
+    //     title,
+    //     author,
+    //     genre,publishedYear,description,id
+    //   };
+
+    //   fetch(`https://64f6f41c9d7754084952d88a.mockapi.io/bookusers`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(newBook),
+    //   }).then(() => {
+    //     displayBooks();
+    //     document.getElementById("book-list").reset();
+    //   });
+    //   function editBook(bookId) {}
+
+    //   function deleteBook(id) {}
+
+      displayBooks();
+    </script>
+  </body>
+</html>
